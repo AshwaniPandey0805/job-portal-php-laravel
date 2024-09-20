@@ -11,6 +11,7 @@
     <link rel="stylesheet" type="text/css" href={{ asset("assets/css/style.css") }} />
 	<!-- Fav Icon -->
 	<link rel="shortcut icon" type="image/x-icon" href="#" />
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
 <body data-instant-intensity="mousedown">
 <header>
@@ -29,7 +30,11 @@
 						<a class="nav-link" aria-current="page" href="jobs.html">Find Jobs</a>
 					</li>										
 				</ul>				
-				<a class="btn btn-outline-primary me-2" href="login.html" type="submit">Login</a>
+				@if (Auth::check() == false)
+					<a class="btn btn-outline-primary me-2" href="{{route('account.login')}}" type="submit">Login</a>	
+				@else 
+					<a class="btn btn-outline-primary me-2" href="{{route('account.profile')}}" type="submit">Account</a>
+				@endif
 				<a class="btn btn-primary" href="post-job.html" type="submit">Post a Job</a>
 			</div>
 		</div>
@@ -72,5 +77,13 @@
 <script src={{ asset("assets/js/slick.min.js") }}></script>
 <script src={{ asset("assets/js/lightbox.min.js") }}></script>
 <script src={{ asset("assets/js/custom.js") }}></script>
+<script>
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+</script>
+@yield('custom-js')
 </body>
 </html>
